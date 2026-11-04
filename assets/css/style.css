@@ -1726,7 +1726,11 @@ a.puns-card:focus-visible {
   border-top: 1px solid var(--puns-border);
 }
 
-.puns-article__tag {
+.puns-article__tag,
+.puns-article__body .puns-article__tag,
+.entry-content .puns-article__tag {
+  display: inline-flex;
+  align-items: center;
   background-color: var(--puns-tag-article-bg);
   color: var(--puns-tag-article-text);
   font-size: var(--puns-text-xs);
@@ -1735,12 +1739,21 @@ a.puns-card:focus-visible {
   text-transform: uppercase;
   padding: 8px 14px;
   border-radius: 999px;
-  transition: var(--puns-transition);
+  text-decoration: none;
+  text-underline-offset: unset;
+  text-decoration-thickness: unset;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.puns-article__tag:hover {
+.puns-article__tag:hover,
+.puns-article__tag:focus-visible,
+.puns-article__body .puns-article__tag:hover,
+.puns-article__body .puns-article__tag:focus-visible,
+.entry-content .puns-article__tag:hover,
+.entry-content .puns-article__tag:focus-visible {
   background-color: var(--puns-teal);
   color: var(--puns-white);
+  text-decoration: none;
 }
 
 .puns-article__bio {

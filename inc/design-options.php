@@ -1368,7 +1368,7 @@ function puns_render_design_options_page() {
 						>
 							<div class="puns-design-admin__toolbar">
 								<div>
-									<h2><?php echo esc_html( $label ); ?></h2>
+					<h2><?php echo esc_html( $label ); ?></h2>
 									<?php if ( ! empty( $hints[ $area ] ) ) : ?>
 										<p class="puns-design-admin__hint"><?php echo esc_html( $hints[ $area ] ); ?></p>
 									<?php endif; ?>
@@ -1378,28 +1378,28 @@ function puns_render_design_options_page() {
 									<span class="puns-design-admin__selected-name"><?php echo esc_html( $selected_name ); ?></span>
 								</div>
 							</div>
-							<div class="puns-design-admin__grid">
+					<div class="puns-design-admin__grid">
 								<?php foreach ( $choices as $number => $name ) : ?>
-									<label class="puns-design-admin__choice">
-										<input
-											type="radio"
-											name="puns_design_options[<?php echo esc_attr( $area ); ?>]"
-											value="<?php echo esc_attr( (string) $number ); ?>"
+							<label class="puns-design-admin__choice">
+								<input
+									type="radio"
+									name="puns_design_options[<?php echo esc_attr( $area ); ?>]"
+									value="<?php echo esc_attr( (string) $number ); ?>"
 											<?php checked( $selected_num, (int) $number ); ?>
-										>
-										<span class="puns-design-admin__card">
+								>
+								<span class="puns-design-admin__card">
 											<span class="puns-design-admin__check" aria-hidden="true">✓</span>
 											<?php puns_render_design_preview( $area, (int) $number ); ?>
 											<span class="puns-design-admin__meta">
-												<span class="puns-design-admin__num"><?php echo esc_html( (string) $number ); ?></span>
-												<span class="puns-design-admin__label"><?php echo esc_html( $name ); ?></span>
+									<span class="puns-design-admin__num"><?php echo esc_html( (string) $number ); ?></span>
+									<span class="puns-design-admin__label"><?php echo esc_html( $name ); ?></span>
 											</span>
-										</span>
-									</label>
-								<?php endforeach; ?>
-							</div>
-						</section>
-					<?php endforeach; ?>
+								</span>
+							</label>
+						<?php endforeach; ?>
+					</div>
+				</section>
+			<?php endforeach; ?>
 
 					<div class="puns-design-admin__actions">
 						<div class="puns-design-admin__actions-copy">

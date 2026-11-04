@@ -347,6 +347,23 @@ add_action( 'wp_ajax_puns_load_more', 'puns_ajax_load_more_posts' );
 add_action( 'wp_ajax_nopriv_puns_load_more', 'puns_ajax_load_more_posts' );
 
 /**
+ * Max pages for the current Load More context.
+ *
+ * On a static front page the main query is the Page itself (1 page),
+ * so we must calculate max pages from the posts batch query instead.
+ *
+ * @param array<string, mixed> $params Load More params.
+ * @return int
+ */
+function puns_get_load_more_max_pages( $params ) {
+	$query = new WP_Query( puns_load_more_query_args( 1, $params ) );
+	$max   = (int) $query->max_num_pages;
+	wp_reset_postdata();
+
+	return max( 1, $max );
+}
+
+/**
  * Enqueue Load More script on supported pages.
  */
 function puns_enqueue_load_more() {
@@ -364,19 +381,27 @@ function puns_enqueue_load_more() {
 
 	global $wp_query;
 
+	$params    = puns_get_load_more_params();
+	$max_pages = (int) $wp_query->max_num_pages;
+
+	// Static homepage / custom home query: main $wp_query is the page, not posts.
+	if ( 'home' === ( $params['context'] ?? '' ) || is_front_page() ) {
+		$max_pages = puns_get_load_more_max_pages( $params );
+	}
+
 	$config = array_merge(
 		array(
 			'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
 			'nonce'     => wp_create_nonce( 'puns_load_more' ),
 			'action'    => 'puns_load_more',
 			'page'      => 1,
-			'maxPages'  => (int) $wp_query->max_num_pages,
+			'maxPages'  => max( 1, $max_pages ),
 			'loading'   => __( 'Loading...', 'puns' ),
 			'loadMore'  => __( 'Load More', 'puns' ),
 			'loadError' => __( 'Could not load posts. Try again.', 'puns' ),
 			'skeletons' => 3,
 		),
-		puns_get_load_more_params()
+		$params
 	);
 
 	wp_localize_script( 'puns-load-more', 'punsBlogLoadMore', $config );

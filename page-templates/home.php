@@ -24,15 +24,16 @@ get_header();
 
 		get_template_part( 'template-parts/home', 'featured' );
 
-		$content = get_the_content();
+		// Use raw post content and strip theme shortcodes BEFORE the_content,
+		// otherwise [puns_featured_hero] / [puns_latest_posts] render a second copy.
+		$post    = get_post();
+		$content = $post instanceof WP_Post ? (string) $post->post_content : '';
 		$content = function_exists( 'puns_normalize_shortcode_quotes' )
 			? puns_normalize_shortcode_quotes( $content )
 			: $content;
-		$content = apply_filters( 'the_content', $content );
 
-		// Remove leftover raw shortcode paragraphs from older editor content.
 		$content = preg_replace(
-			'/<p[^>]*>\s*\[(?:puns_featured_hero|puns_latest_posts)[^\]]*\]\s*<\/p>/i',
+			'/<!--\s*wp:shortcode\s*-->\s*\[(?:puns_featured_hero|puns_latest_posts)[^\]]*\]\s*<!--\s*\/wp:shortcode\s*-->/i',
 			'',
 			$content
 		);
@@ -42,6 +43,11 @@ get_header();
 			$content
 		);
 		$content = trim( (string) $content );
+
+		if ( '' !== $content ) {
+			$content = apply_filters( 'the_content', $content );
+			$content = trim( (string) $content );
+		}
 
 		if ( '' !== $content && false === strpos( wp_strip_all_tags( $content ), 'No posts found' ) ) {
 			?>
