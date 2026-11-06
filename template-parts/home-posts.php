@@ -41,7 +41,7 @@ $posts_query = new WP_Query( $query_args );
 <section class="puns-posts puns-container">
 	<?php if ( $show_title && '' !== trim( $title ) ) : ?>
 		<header class="puns-posts__header">
-			<h1 class="puns-posts__title"><?php echo esc_html( $title ); ?></h1>
+			<h2 class="puns-posts__title"><?php echo esc_html( $title ); ?></h2>
 		</header>
 	<?php endif; ?>
 

@@ -16,6 +16,7 @@ $featured_id   = $featured_post ? $featured_post->ID : 0;
 ?>
 
 <main class="puns-main">
+	<h1 class="puns-page-title"><?php echo esc_html( get_the_title( (int) get_option( 'page_for_posts' ) ) ?: get_bloginfo( 'name' ) ); ?></h1>
 
 	<?php if ( $featured_post ) : ?>
 		<?php
@@ -72,7 +73,7 @@ $featured_id   = $featured_post ? $featured_post->ID : 0;
 
 	<section class="puns-posts puns-container">
 		<header class="puns-posts__header">
-			<h1 class="puns-posts__title"><?php echo esc_html( puns_get_home_posts_title() ); ?></h1>
+			<h2 class="puns-posts__title"><?php echo esc_html( puns_get_home_posts_title() ); ?></h2>
 		</header>
 
 		<?php if ( have_posts() ) : ?>

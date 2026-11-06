@@ -21,7 +21,9 @@ get_header();
 	<?php
 	while ( have_posts() ) :
 		the_post();
-
+		?>
+		<h1 class="puns-page-title"><?php the_title(); ?></h1>
+		<?php
 		get_template_part( 'template-parts/home', 'featured' );
 
 		// Use raw post content and strip theme shortcodes BEFORE the_content,

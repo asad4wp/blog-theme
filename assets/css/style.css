@@ -201,6 +201,10 @@ button {
   padding-top: var(--puns-nav-height);
 }
 
+.puns-page-title {
+  display: none;
+}
+
 .puns-icon {
   font-family: 'Material Symbols Outlined';
   font-weight: normal;
