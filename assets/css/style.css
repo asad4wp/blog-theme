@@ -688,6 +688,7 @@ body.puns-menu-open .puns-header {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  min-width: 0;
 }
 
 .puns-hero__eyebrow {
@@ -719,13 +720,16 @@ body.puns-menu-open .puns-header {
   font-weight: var(--puns-weight-bold);
   color: var(--puns-teal);
   letter-spacing: -0.02em;
-  max-width: 540px;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 .puns-page-home .puns-hero__title {
-  font-size: 42px;
-  line-height: 1.08;
-  max-width: 680px;
+  font-size: clamp(1.75rem, 2.4vw, 2.625rem);
+  line-height: 1.12;
+  max-width: 100%;
 }
 
 .puns-hero__description {
@@ -734,7 +738,7 @@ body.puns-menu-open .puns-header {
   line-height: 1.7;
   font-weight: var(--puns-weight-normal);
   color: var(--puns-text-muted);
-  max-width: 520px;
+  max-width: 100%;
 }
 
 .puns-page-home .puns-hero__description {
@@ -1172,15 +1176,27 @@ a.puns-card:focus-visible {
 .puns-footer__social {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .puns-footer__social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
   color: var(--puns-text-light);
   transition: var(--puns-transition);
 }
 
-.puns-footer__social-link:hover {
+.puns-footer__social-icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.puns-footer__social-link:hover,
+.puns-footer__social-link:focus-visible {
   color: var(--puns-teal);
 }
 
@@ -2423,7 +2439,7 @@ a.puns-card:focus-visible {
   }
 
   .puns-hero__grid {
-    grid-template-columns: 0.9fr 1.2fr;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr);
     gap: 48px;
   }
 
@@ -2432,9 +2448,9 @@ a.puns-card:focus-visible {
   }
 
   .puns-page-home .puns-hero__title {
-    font-size: 42px;
-    line-height: 1.08;
-    max-width: 680px;
+    font-size: clamp(1.85rem, 2.2vw, 2.625rem);
+    line-height: 1.12;
+    max-width: 100%;
   }
 
   .puns-posts__grid {

@@ -603,6 +603,14 @@ function puns_build_schema_graph() {
 		);
 	}
 
+	if ( function_exists( 'puns_get_social_profiles' ) ) {
+		$same_as = array_values( puns_get_social_profiles() );
+
+		if ( ! empty( $same_as ) ) {
+			$organization['sameAs'] = $same_as;
+		}
+	}
+
 	$graph[] = $organization;
 
 	$crumbs = puns_get_breadcrumbs();

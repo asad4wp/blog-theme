@@ -61,7 +61,7 @@ function puns_customize_register( $wp_customize ) {
 		'puns_footer',
 		array(
 			'title'       => __( 'Footer', 'puns' ),
-			'description' => __( 'Customize the footer logo and copyright text.', 'puns' ),
+			'description' => __( 'Customize the footer logo, copyright, and brand social profiles.', 'puns' ),
 			'priority'    => 40,
 		)
 	);
@@ -165,6 +165,27 @@ function puns_customize_register( $wp_customize ) {
 			'priority'    => 40,
 		)
 	);
+
+	foreach ( puns_get_social_network_fields() as $key => $field ) {
+		$wp_customize->add_setting(
+			'puns_social_' . $key,
+			array(
+				'default'           => '',
+				'sanitize_callback' => 'esc_url_raw',
+			)
+		);
+
+		$wp_customize->add_control(
+			'puns_social_' . $key,
+			array(
+				'label'       => $field['label'],
+				'description' => $field['description'],
+				'section'     => 'puns_footer',
+				'type'        => 'url',
+				'priority'    => (int) $field['priority'],
+			)
+		);
+	}
 
 	$wp_customize->add_section(
 		'puns_homepage',
@@ -420,6 +441,110 @@ function puns_the_footer_copyright() {
 		'<p class="puns-footer__copyright">%s</p>',
 		esc_html( puns_parse_footer_copyright( get_theme_mod( 'puns_footer_copyright', '' ) ) )
 	);
+}
+
+/**
+ * Social profile fields shown in the Customizer.
+ *
+ * @return array<string, array{label:string,description:string,priority:int}>
+ */
+function puns_get_social_network_fields() {
+	return array(
+		'pinterest'  => array(
+			'label'       => __( 'Pinterest', 'puns' ),
+			'description' => __( 'Brand Pinterest profile URL. Pin each post from day one.', 'puns' ),
+			'priority'    => 50,
+		),
+		'facebook'   => array(
+			'label'       => __( 'Facebook Page', 'puns' ),
+			'description' => __( 'Facebook page URL. Put the site link in the page bio.', 'puns' ),
+			'priority'    => 51,
+		),
+		'x'          => array(
+			'label'       => __( 'X (Twitter)', 'puns' ),
+			'description' => __( 'X / Twitter profile URL.', 'puns' ),
+			'priority'    => 52,
+		),
+		'instagram'  => array(
+			'label'       => __( 'Instagram', 'puns' ),
+			'description' => __( 'Instagram profile URL. Put the site link in the bio.', 'puns' ),
+			'priority'    => 53,
+		),
+	);
+}
+
+/**
+ * Saved social profile URLs with a value.
+ *
+ * @return array<string, string>
+ */
+function puns_get_social_profiles() {
+	$profiles = array();
+
+	foreach ( array_keys( puns_get_social_network_fields() ) as $key ) {
+		$url = esc_url_raw( (string) get_theme_mod( 'puns_social_' . $key, '' ) );
+
+		if ( '' !== $url ) {
+			$profiles[ $key ] = $url;
+		}
+	}
+
+	return $profiles;
+}
+
+/**
+ * Inline SVG for a social network.
+ *
+ * @param string $network Network key.
+ * @return string
+ */
+function puns_get_social_icon_svg( $network ) {
+	$icons = array(
+		'pinterest' => '<svg class="puns-footer__social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12.04 2C6.52 2 3 6.08 3 10.86c0 3.08 1.74 4.9 2.72 4.9.4 0 .64-1.12.64-1.44 0-.38-1-1.2-1-2.8 0-3.3 2.5-6.3 6.44-6.3 3.12 0 5.44 1.78 5.44 5.04 0 2.42-1.04 6.96-4.4 6.96-1.2 0-2.22-.88-1.92-1.96.36-1.54 1.06-3.2 1.06-4.32 0-1-1.7-1.86-1.7.7 0 1.46.5 3.46.5 4.9 0 1.7-.86 3.5-3.54 3.5-2.8 0-4.64-2.7-4.64-6.54C3.86 6.2 7.34 2.9 12.1 2.9c4.86 0 8.5 3.46 8.5 8.08 0 4.82-3.04 8.7-7.26 8.7-1.42 0-2.76-.74-3.22-1.6l-.88 3.34C8.4 22.5 10.16 23 12.04 23 17.56 23 21 18.2 21 11.86 21 6.08 16.86 2 12.04 2z"/></svg>',
+		'facebook'  => '<svg class="puns-footer__social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M22 12.07C22 6.5 17.52 2 12 2S2 6.5 2 12.07C2 17.1 5.66 21.24 10.44 22v-7.01H7.9v-2.92h2.54V9.84c0-2.52 1.49-3.91 3.78-3.91 1.1 0 2.24.2 2.24.2v2.48h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.44 2.92h-2.34V22C18.34 21.24 22 17.1 22 12.07z"/></svg>',
+		'x'         => '<svg class="puns-footer__social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18.24 3H21l-6.51 7.44L22 21h-6.17l-4.82-6.3L5.4 21H2.62l6.97-7.97L2 3h6.32l4.35 5.75L18.24 3zm-2.16 16.2h1.7L7.84 4.7H6.01l10.07 14.5z"/></svg>',
+		'instagram' => '<svg class="puns-footer__social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M7.75 3h8.5A4.75 4.75 0 0 1 21 7.75v8.5A4.75 4.75 0 0 1 16.25 21h-8.5A4.75 4.75 0 0 1 3 16.25v-8.5A4.75 4.75 0 0 1 7.75 3zm0 1.5A3.25 3.25 0 0 0 4.5 7.75v8.5A3.25 3.25 0 0 0 7.75 19.5h8.5a3.25 3.25 0 0 0 3.25-3.25v-8.5A3.25 3.25 0 0 0 16.25 4.5h-8.5zM12 8.25A3.75 3.75 0 1 1 8.25 12 3.75 3.75 0 0 1 12 8.25zm0 1.5A2.25 2.25 0 1 0 14.25 12 2.25 2.25 0 0 0 12 9.75zM17.13 7.12a.88.88 0 1 1-.88.88.88.88 0 0 1 .88-.88z"/></svg>',
+	);
+
+	return isset( $icons[ $network ] ) ? $icons[ $network ] : '';
+}
+
+/**
+ * Render footer social profile links.
+ */
+function puns_the_footer_social() {
+	$profiles = puns_get_social_profiles();
+	$labels   = array(
+		'pinterest' => __( 'Pinterest', 'puns' ),
+		'facebook'  => __( 'Facebook', 'puns' ),
+		'x'         => __( 'X', 'puns' ),
+		'instagram' => __( 'Instagram', 'puns' ),
+	);
+
+	if ( empty( $profiles ) ) {
+		return;
+	}
+
+	echo '<nav class="puns-footer__social" aria-label="' . esc_attr__( 'Social profiles', 'puns' ) . '">';
+
+	foreach ( $profiles as $network => $url ) {
+		$label = isset( $labels[ $network ] ) ? $labels[ $network ] : $network;
+		$icon  = puns_get_social_icon_svg( $network );
+
+		if ( '' === $icon ) {
+			continue;
+		}
+
+		printf(
+			'<a class="puns-footer__social-link puns-footer__social-link--%1$s" href="%2$s" target="_blank" rel="noopener noreferrer me" aria-label="%3$s">%4$s</a>',
+			esc_attr( $network ),
+			esc_url( $url ),
+			esc_attr( $label ),
+			$icon // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG.
+		);
+	}
+
+	echo '</nav>';
 }
 
 /**

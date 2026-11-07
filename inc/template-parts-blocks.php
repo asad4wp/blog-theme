@@ -227,9 +227,7 @@ function puns_render_classic_footer() {
 					</nav>
 				<?php endif; ?>
 
-				<div class="puns-footer__social">
-					<a class="puns-footer__social-link puns-icon" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Website', 'puns' ); ?>">public</a>
-				</div>
+				<?php puns_the_footer_social(); ?>
 			</div>
 		</div>
 	</footer>
